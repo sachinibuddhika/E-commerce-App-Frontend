@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../redux/actions/productsActions";
 import {
   TextField,
   Grid,
@@ -11,6 +13,9 @@ import {
 } from "@mui/material";
 
 function AddProductPage() {
+  const dispatch = useDispatch(); // Accessing the dispatch function for Redux
+
+  // State to hold form input data
   const [formData, setFormData] = useState({
     sku: "",
     quantity: "",
@@ -19,24 +24,26 @@ function AddProductPage() {
     images: [],
   });
 
+  // Handles changes to input fields
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files } = e.target; // Destructuring the target properties
     if (name === "images") {
       setFormData((prevData) => ({
         ...prevData,
-        images: [...files],
+        images: [...files], // Updating the images array
       }));
     } else {
       setFormData({
         ...formData,
-        [name]: value,
+        [name]: value, // Updating the corresponding form field
       });
     }
   };
 
+  // Handles form submission
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
+    e.preventDefault(); // Preventing the default form submission
+    dispatch(addProduct(formData)); // Dispatching the action to add the product
   };
 
   return (
@@ -140,6 +147,7 @@ function AddProductPage() {
                     fontFamily: "Satoshi, sans-serif",
                     fontSize: "16px",
                     fontWeight: 500,
+                    marginLeft: "25px",
                   }}
                 >
                   QTY
@@ -276,7 +284,7 @@ function AddProductPage() {
               )}
             </Box>
 
-            <Grid xs={12} sm={3}>
+            <Grid item xs={12} sm={3}>
               <Typography
                 variant="caption"
                 sx={{ color: "#969191", marginTop: "5px" }}
