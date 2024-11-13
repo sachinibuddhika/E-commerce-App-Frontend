@@ -30,7 +30,7 @@ function AddProductPage() {
     if (name === "images") {
       setFormData((prevData) => ({
         ...prevData,
-        images: [...files], // Updating the images array
+        images: [...prevData.images, ...Array.from(files)], // Updating the images array
       }));
     } else {
       setFormData({
@@ -41,9 +41,57 @@ function AddProductPage() {
   };
 
   // Handles form submission
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Preventing the default form submission
-    dispatch(addProduct(formData)); // Dispatching the action to add the product
+  // const handleSubmit = (e) => {
+  //   e.preventDefault(); // Preventing the default form submission
+  //   console.log("Form Data Submitted: ", formData);
+  //   dispatch(addProduct(formData)); // Dispatching the action to add the product
+  //   console.log("Add Product action dispatched");
+  // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Check if form data is valid
+    if (
+      !formData.sku ||
+      !formData.productName ||
+      formData.images.length === 0
+    ) {
+      alert("Please fill all fields and add images!");
+      return;
+    }
+
+    // Create a FormData object to send both text fields and image files
+    const formDataToSend = new FormData();
+    formDataToSend.append("sku", formData.sku);
+    formDataToSend.append("productName", formData.productName);
+    formDataToSend.append("quantity", formData.quantity);
+    formDataToSend.append("description", formData.productDescription);
+
+    // Append images as FormData
+    Array.from(formData.images).forEach((image) => {
+      formDataToSend.append("images", image); // 'images' must match the field name in multer setup
+    });
+
+    try {
+      // Make the API call to add the product (using fetch, axios, etc.)
+      const response = await fetch("http://localhost:4000/add-product", {
+        method: "POST",
+        body: formDataToSend, // Send FormData to backend
+      });
+
+      const data = await response.json();
+      console.log("Server response:", data);
+
+      if (response.ok) {
+        console.log("Product added successfully:", data);
+        // Optionally, dispatch to Redux or navigate
+      } else {
+        console.error("Error adding product:", data);
+      }
+    } catch (err) {
+      console.error("Failed to add product:", err);
+    }
   };
 
   return (
@@ -245,6 +293,7 @@ function AddProductPage() {
                 >
                   <Link
                     component="button"
+                    type="button"
                     variant="body2"
                     onClick={() =>
                       document.getElementById("image-upload").click()
