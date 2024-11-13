@@ -10,6 +10,9 @@ import {
   Box,
   TextareaAutosize,
   Link,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
 } from "@mui/material";
 
 function AddProductPage() {
@@ -22,6 +25,7 @@ function AddProductPage() {
     productName: "",
     productDescription: "",
     images: [],
+    thumbnail: "", // Track the selected thumbnail image
   });
 
   // Handles changes to input fields
@@ -32,6 +36,11 @@ function AddProductPage() {
         ...prevData,
         images: [...prevData.images, ...Array.from(files)], // Updating the images array
       }));
+    } else if (name === "thumbnail") {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
     } else {
       setFormData({
         ...formData,
@@ -40,14 +49,6 @@ function AddProductPage() {
     }
   };
 
-  // Handles form submission
-  // const handleSubmit = (e) => {
-  //   e.preventDefault(); // Preventing the default form submission
-  //   console.log("Form Data Submitted: ", formData);
-  //   dispatch(addProduct(formData)); // Dispatching the action to add the product
-  //   console.log("Add Product action dispatched");
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,7 +56,8 @@ function AddProductPage() {
     if (
       !formData.sku ||
       !formData.productName ||
-      formData.images.length === 0
+      formData.images.length === 0 ||
+      !formData.thumbnail
     ) {
       alert("Please fill all fields and add images!");
       return;
@@ -67,14 +69,15 @@ function AddProductPage() {
     formDataToSend.append("productName", formData.productName);
     formDataToSend.append("quantity", formData.quantity);
     formDataToSend.append("description", formData.productDescription);
+    formDataToSend.append("thumbnail", formData.thumbnail);
 
     // Append images as FormData
     Array.from(formData.images).forEach((image) => {
-      formDataToSend.append("images", image); // 'images' must match the field name in multer setup
+      formDataToSend.append("images", image);
     });
 
     try {
-      // Make the API call to add the product (using fetch, axios, etc.)
+      // Make the API call to add the product
       const response = await fetch("http://localhost:4000/add-product", {
         method: "POST",
         body: formDataToSend, // Send FormData to backend
@@ -85,6 +88,7 @@ function AddProductPage() {
 
       if (response.ok) {
         console.log("Product added successfully:", data);
+        console.log("form data:", formData);
         // Optionally, dispatch to Redux or navigate
       } else {
         console.error("Error adding product:", data);
@@ -324,9 +328,27 @@ function AddProductPage() {
               {formData.images && formData.images.length > 0 && (
                 <div>
                   <Typography variant="body2">Selected Images:</Typography>
-                  <ul>
-                    {Array.from(formData.images).map((image, index) => (
-                      <li key={index}>{image.name}</li>
+                  <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
+                    {formData.images.map((image, index) => (
+                      <li key={index}>
+                        <img
+                          src={URL.createObjectURL(image)}
+                          alt={image.name}
+                          width={50}
+                          height={50}
+                        />
+                        <RadioGroup
+                          value={formData.thumbnail}
+                          onChange={handleChange}
+                          name="thumbnail"
+                        >
+                          <FormControlLabel
+                            value={image.name}
+                            control={<Radio />}
+                            label="Set as Thumbnail"
+                          />
+                        </RadioGroup>
+                      </li>
                     ))}
                   </ul>
                 </div>
