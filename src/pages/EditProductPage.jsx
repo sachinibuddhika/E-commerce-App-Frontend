@@ -23,15 +23,7 @@ function EditProductPage() {
   const { sku } = useParams(); // Get SKU from URL params
   const dispatch = useDispatch(); // Hook to dispatch actions
   const products = useSelector((state) => state.products.products); // Get products from the Redux store
-  const [productData, setProductData] = useState({
-    sku: "",
-    productName: "",
-    quantity: "",
-    description: "",
-    price: 29.99, // Default price (fallback in case there's no price)
-    images: [],
-    thumbnail: "",
-  });
+  const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Fetch products from Redux if they are not already loaded
@@ -65,12 +57,55 @@ function EditProductPage() {
     }
   }, [products, sku]);
 
+  useEffect(() => {
+    console.log("=====Changed product data======");
+    console.log([productData]);
+  }, [productData]);
+
   //Handle form input changes
+  // const handleChange = (e) => {
+  //   const { name, files } = e.target;
+
+  //   setProductData((prevData) => {
+  //     if (name === "images" && files) {
+  //       // Convert files to array of URLs (temporary URLs for frontend use)
+  //       const newImageUrls = Array.from(files).map((file) =>
+  //         URL.createObjectURL(file)
+  //       );
+
+  //       return {
+  //         ...prevData,
+  //         images: [...prevData.images, ...newImageUrls], // Append the new image URLs to the existing array
+  //       };
+  //     }
+
+  //     // For all other fields, update the field normally
+  //     return {
+  //       ...prevData,
+  //       [name]: e.target.value, // Update other fields dynamically
+  //     };
+  //   });
+  // };
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProductData({
-      ...productData,
-      [name]: value,
+    const { name, files } = e.target;
+
+    setProductData((prevData) => {
+      if (name === "images" && files) {
+        // Convert files to an array and append them to the existing images array
+        const newFiles = Array.from(files);
+
+        return {
+          ...prevData,
+          images: [...prevData.images, ...newFiles], // Append the new files to the existing images array
+        };
+      }
+
+      // For other fields, update the field normally
+      return {
+        ...prevData,
+        [name]: e.target.value, // Update other fields dynamically
+      };
     });
   };
 
@@ -410,57 +445,63 @@ function EditProductPage() {
             {/* Display Images */}
             <Grid item xs={12}>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-                {productData.images.map((imageUrl, index) => {
-                  const fullImageUrl =
-                    typeof imageUrl === "string"
-                      ? `http://localhost:4000/uploads/${imageUrl}`
-                      : URL.createObjectURL(imageUrl);
-                  {
-                    /* {Array.isArray(productData.images) &&
+                {productData &&
+                Array.isArray(productData.images) &&
+                productData.images.length > 0 ? (
+                  productData.images.map((imageUrl, index) => {
+                    const fullImageUrl =
+                      typeof imageUrl === "string"
+                        ? `http://localhost:4000/uploads/${imageUrl}`
+                        : URL.createObjectURL(imageUrl);
+                    {
+                      /* {Array.isArray(productData.images) &&
                   productData.images.map((imageUrl, index) => {
                     const fullImageUrl =
                       typeof imageUrl === "string"
                         ? `http://localhost:4000/uploads/${imageUrl}`
                         : URL.createObjectURL(imageUrl); */
-                  }
-                  return (
-                    <Box
-                      key={index}
-                      sx={{ position: "relative", width: "100px" }}
-                    >
-                      <img
-                        src={fullImageUrl}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <IconButton
-                        sx={{
-                          position: "absolute",
-                          top: "0",
-                          right: "0",
-                          background: "rgba(255, 255, 255, 0.7)",
-                        }}
-                        onClick={() => handleRemoveImage(imageUrl)}
+                    }
+                    return (
+                      <Box
+                        key={index}
+                        sx={{ position: "relative", width: "100px" }}
                       >
-                        <PhotoCamera />
-                      </IconButton>
-                      <FormControlLabel
-                        control={
-                          <Radio
-                            checked={productData.thumbnail === imageUrl}
-                            onChange={handleThumbnailChange}
-                            value={imageUrl}
-                          />
-                        }
-                        label="Set as Thumbnail"
-                      />
-                    </Box>
-                  );
-                })}
+                        <img
+                          src={fullImageUrl}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
+                        />
+                        <IconButton
+                          sx={{
+                            position: "absolute",
+                            top: "0",
+                            right: "0",
+                            background: "rgba(255, 255, 255, 0.7)",
+                          }}
+                          onClick={() => handleRemoveImage(imageUrl)}
+                        >
+                          <PhotoCamera />
+                        </IconButton>
+                        <FormControlLabel
+                          control={
+                            <Radio
+                              checked={productData.thumbnail === imageUrl}
+                              onChange={handleThumbnailChange}
+                              value={imageUrl}
+                            />
+                          }
+                          label="Set as Thumbnail"
+                        />
+                      </Box>
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
               </Box>
 
               <Grid item xs={12} sm={3}>
