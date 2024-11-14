@@ -1,18 +1,5 @@
 import { FETCH_PRODUCTS, ADD_PRODUCT, DELETE_PRODUCT, UPDATE_PRODUCT } from "../types";
 
-// Action to fetch products
-
-// export const fetchProducts = () => async (dispatch) => {
-//   try {
-//     const response = await fetch("http://localhost:4000/api/products");
-//     const data = await response.json();
-//     dispatch({ type: "FETCH_PRODUCTS", payload: data });
-//   } catch (error) {
-//     console.error("Error fetching products:", error);
-//   }
-// };
-
-// productActions.js
 export const fetchProducts = () => async (dispatch) => {
   try {
     const response = await fetch("http://localhost:4000/api/products");
@@ -30,6 +17,29 @@ export const fetchProducts = () => async (dispatch) => {
   }
 };
 
+// export const fetchProducts = () => async (dispatch) => {
+//   try {
+//     const response = await fetch("https://localhost:4000//api/products");
+//     const data = await response.json();
+
+//     if (response.ok) {
+//       dispatch({
+//         type: "FETCH_PRODUCTS_SUCCESS",
+//         payload: data,
+//       });
+//     } else {
+//       dispatch({
+//         type: "FETCH_PRODUCTS_FAILURE",
+//         payload: data,
+//       });
+//     }
+//   } catch (error) {
+//     dispatch({
+//       type: "FETCH_PRODUCTS_FAILURE",
+//       payload: error.message,
+//     });
+//   }
+// };
 
 
 

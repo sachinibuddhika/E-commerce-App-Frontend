@@ -233,6 +233,7 @@ function MainPage() {
                 >
                   {product.productName}
                 </TableCell>
+
                 <TableCell
                   sx={{ padding: "15px 40px 15px 80px", fontSize: "16px" }}
                 >
