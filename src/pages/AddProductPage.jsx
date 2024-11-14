@@ -199,7 +199,7 @@ function AddProductPage() {
                     fontFamily: "Satoshi, sans-serif",
                     fontSize: "16px",
                     fontWeight: 500,
-                    marginLeft: "25px",
+                    marginLeft: "45px",
                   }}
                 >
                   QTY
@@ -258,6 +258,7 @@ function AddProductPage() {
               style={{
                 marginTop: "10px",
                 width: "100%",
+                height: "25px",
                 borderRadius: "4px",
                 fontFamily: "Satoshi, sans-serif",
                 backgroundColor: "#F7F7F7",
@@ -271,8 +272,8 @@ function AddProductPage() {
           </Grid>
 
           <Grid item xs={12}>
-            <Grid container alignItems="center" spacing={2}>
-              <Grid item xs={12} sm={6}>
+            <Grid container alignItems="center">
+              <Grid item xs={12} sm={4}>
                 <Typography
                   variant="body1"
                   sx={{
@@ -355,7 +356,7 @@ function AddProductPage() {
               )}
             </Box>
 
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={2}>
               <Typography
                 variant="caption"
                 sx={{ color: "#969191", marginTop: "5px" }}
@@ -370,9 +371,12 @@ function AddProductPage() {
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
               variant="contained"
-              color="primary"
               type="submit"
-              sx={{ padding: "10px 20px" }}
+              sx={{
+                padding: "20px 70px",
+                color: "#FFFF",
+                backgroundColor: "#001EB9",
+              }}
             >
               Add Product
             </Button>

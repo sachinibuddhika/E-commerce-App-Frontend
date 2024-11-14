@@ -14,13 +14,14 @@ function AppBarComponent() {
     >
       <Toolbar>
         <div style={{ flexGrow: 1 }}></div>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", marginTop: "30px" }}>
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{
               fontFamily: "Satoshi, sans-serif",
               marginRight: 1,
               color: "#000",
+              fontWeight: "bold",
             }}
           >
             ADMIN
@@ -30,7 +31,7 @@ function AppBarComponent() {
             sx={{
               lineHeight: 1,
               marginRight: 3,
-              fontSize: 16,
+              fontSize: 28,
               verticalAlign: "top",
               color: "#000",
             }}
@@ -39,10 +40,10 @@ function AppBarComponent() {
             src="src/assets/userIcon.png"
             alt="User"
             style={{
-              width: 32,
-              height: 32,
+              width: 48,
+              height: 48,
               borderRadius: "50%",
-              marginRight: "30px",
+              marginRight: "75px",
             }}
           />
         </Box>

@@ -25,7 +25,7 @@ function BreadcrumbsComponent() {
     <Typography
       key="products"
       sx={{
-        fontSize: "1.5rem",
+        fontSize: "2rem",
         marginLeft: "30px",
         fontWeight: "bold",
         textTransform: "uppercase",
@@ -47,11 +47,12 @@ function BreadcrumbsComponent() {
         <Link to={path} key={path} style={{ textDecoration: "none" }}>
           <Typography
             sx={{
-              fontSize: "1rem",
+              fontSize: "18px",
               textTransform: "capitalize",
               color: "#001EB9",
               marginRight: "10px",
               letterSpacing: "0.2em",
+              fontWeight: "bold",
             }}
           >
             {formattedPart}
@@ -66,7 +67,7 @@ function BreadcrumbsComponent() {
       <Breadcrumbs
         separator={
           <NavigateNextIcon
-            fontSize="small"
+            fontSize="large"
             sx={{
               color: "#001EB9",
             }}

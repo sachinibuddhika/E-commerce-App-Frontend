@@ -13,8 +13,8 @@ function Layout() {
           padding: "30px",
           marginTop: "20px",
           marginBottom: "50px",
-          marginLeft: "250px",
-          marginRight: "250px",
+          marginLeft: "200px",
+          marginRight: "160px",
         }}
       >
         <BreadcrumbsComponent />
