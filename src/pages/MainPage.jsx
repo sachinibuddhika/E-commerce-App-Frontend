@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"; // <-- Import useDispatch
+import SearchBar from "../components/SearchBar";
 import {
   Button,
   Box,
@@ -37,6 +38,7 @@ function MainPage() {
 
   return (
     <div>
+      <SearchBar />
       <Box
         sx={{
           display: "flex",

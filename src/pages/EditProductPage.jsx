@@ -62,31 +62,6 @@ function EditProductPage() {
     console.log([productData]);
   }, [productData]);
 
-  //Handle form input changes
-  // const handleChange = (e) => {
-  //   const { name, files } = e.target;
-
-  //   setProductData((prevData) => {
-  //     if (name === "images" && files) {
-  //       // Convert files to array of URLs (temporary URLs for frontend use)
-  //       const newImageUrls = Array.from(files).map((file) =>
-  //         URL.createObjectURL(file)
-  //       );
-
-  //       return {
-  //         ...prevData,
-  //         images: [...prevData.images, ...newImageUrls], // Append the new image URLs to the existing array
-  //       };
-  //     }
-
-  //     // For all other fields, update the field normally
-  //     return {
-  //       ...prevData,
-  //       [name]: e.target.value, // Update other fields dynamically
-  //     };
-  //   });
-  // };
-
   const handleChange = (e) => {
     const { name, files } = e.target;
 
@@ -453,14 +428,7 @@ function EditProductPage() {
                       typeof imageUrl === "string"
                         ? `http://localhost:4000/uploads/${imageUrl}`
                         : URL.createObjectURL(imageUrl);
-                    {
-                      /* {Array.isArray(productData.images) &&
-                  productData.images.map((imageUrl, index) => {
-                    const fullImageUrl =
-                      typeof imageUrl === "string"
-                        ? `http://localhost:4000/uploads/${imageUrl}`
-                        : URL.createObjectURL(imageUrl); */
-                    }
+
                     return (
                       <Box
                         key={index}

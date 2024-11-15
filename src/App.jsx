@@ -19,7 +19,7 @@ function App() {
             <Route path="/editProduct/:sku" element={<EditProductPage />} />
             <Route path="favorites" element={<FavoriteProductsPage />} />
             <Route path="productDetails" element={<ProductDetailPage />} />
-            <Route path="searchResult" element={<SearchResultsPage />} />
+            <Route path="searchResults" element={<SearchResultsPage />} />
           </Route>
         </Routes>
       </Router>
