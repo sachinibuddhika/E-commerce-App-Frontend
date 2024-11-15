@@ -38,7 +38,6 @@ function MainPage() {
 
   return (
     <div>
-      <SearchBar />
       <Box
         sx={{
           display: "flex",
@@ -49,21 +48,31 @@ function MainPage() {
           left: "80px",
         }}
       >
-        <Link to="/addProduct" style={{ textDecoration: "none" }}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#001EB9",
-              color: "white",
-              padding: "10px 50px",
-              marginRight: "10px",
-              textTransform: "none",
-              fontSize: "16px",
-            }}
-          >
-            New Product
-          </Button>
-        </Link>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <SearchBar />
+          <Link to="/addProduct" style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#001EB9",
+                color: "white",
+                padding: "10px 50px",
+                marginRight: "10px",
+                textTransform: "none",
+                fontSize: "16px",
+              }}
+            >
+              New Product
+            </Button>
+          </Link>
+        </div>
 
         <Link to="/favorites" style={{ textDecoration: "none" }}>
           <Button

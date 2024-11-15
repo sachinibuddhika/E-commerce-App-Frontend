@@ -1,60 +1,66 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Box, List, ListItem } from "@mui/material";
-import { setSearchQuery } from "../redux/actions/searchActions";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
-  const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const dispatch = useDispatch();
+  const [query, setQuery] = useState(""); // User input
+  const [products, setProducts] = useState([]); // All products from backend
+  const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products based on query
   const navigate = useNavigate();
 
-  // Handle input changes and update suggestions
-  const handleSearchChange = async (event) => {
+  // Fetch all products when the component mounts
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/products");
+        const data = await response.json();
+        setProducts(data); // Set all products from the backend
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Handle search input changes and filter products locally
+  const handleSearchChange = (event) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
-    dispatch(setSearchQuery(newQuery)); // Update the query in Redux
 
+    // Filter products based on query entered by user
     if (newQuery.trim()) {
-      try {
-        // Fetch search suggestions from the backend based on the query
-        const response = await fetch(
-          `http://localhost:4000/api/search?query=${newQuery}`
+      const filtered = products.filter((product) => {
+        const regex = new RegExp(newQuery, "i"); // Case-insensitive search
+        return (
+          regex.test(product.productName) ||
+          regex.test(product.description) ||
+          regex.test(product.sku)
         );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch search suggestions");
-        }
-
-        const data = await response.json();
-        setSuggestions(data); // Update suggestions with the fetched words
-      } catch (error) {
-        console.error("Error fetching search suggestions:", error);
-        setSuggestions([]); // Clear suggestions on error
-      }
+      });
+      setFilteredProducts(filtered);
     } else {
-      setSuggestions([]); // Clear suggestions if query is empty
+      setFilteredProducts([]); // Reset if query is empty
     }
   };
 
-  // Handle submitting the search (clicking on a suggestion)
-  // const handleSearchSubmit = (word) => {
-  //   if (word.trim()) {
-  //     navigate(`/searchResults?query=${word}`); // Redirect to search results page with the selected word
-  //   }
-  // };
-
-  const handleSearchSubmit = (word) => {
-    if (word.trim()) {
-      dispatch(setSearchQuery(word)); // Update the selected word in Redux
-      navigate(`/searchResults?query=${word}`); // Navigate to search results page with query
+  // Handle search submit
+  const handleSearchSubmit = () => {
+    if (query.trim()) {
+      navigate(`/searchResults?query=${query}`);
     }
   };
 
   return (
     <Box
-      sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}
+      sx={{
+        marginTop: "18px",
+        display: "flex",
+        justifyContent: "center",
+        marginBottom: "20px",
+        width: "800px",
+        height: "49px",
+      }}
     >
       <TextField
         value={query}
@@ -62,20 +68,31 @@ const SearchBar = () => {
         label="Search for Products"
         variant="outlined"
         fullWidth
+        sx={{
+          height: "15px",
+          marginLeft: "-50px",
+          borderRadius: "25px",
+        }}
       />
       <Button
-        onClick={() => {
-          handleSearchSubmit(query);
-          console.log(query);
-        }}
+        onClick={handleSearchSubmit}
         variant="contained"
-        sx={{ marginLeft: "10px", height: "100%" }}
+        sx={{
+          marginLeft: "10px",
+          height: "100%",
+          backgroundColor: "#001EB9",
+          borderRadius: "25px",
+          color: "white",
+          "&:hover": {
+            backgroundColor: "#001EB9",
+          },
+        }}
       >
         Search
       </Button>
 
-      {/* Display suggestions */}
-      {query && suggestions.length > 0 && (
+      {/* Display filtered suggestions dynamically */}
+      {query && filteredProducts.length > 0 && (
         <List
           sx={{
             maxHeight: "200px",
@@ -85,16 +102,14 @@ const SearchBar = () => {
             width: "30%",
           }}
         >
-          {suggestions.map((word, index) => (
+          {filteredProducts.map((product, index) => (
             <ListItem
               button
-              key={index} // Use index for word since it's unique
-              onClick={() => {
-                console.log(word); // Log the word
-                handleSearchSubmit(word); // Call the search function
-              }} // On click, search for all products that match this word
+              key={index}
+              onClick={() => handleSearchSubmit(product.productName)}
             >
-              {word} {/* Display the word only */}
+              {product.productName}{" "}
+              {/* Display product name in the suggestions */}
             </ListItem>
           ))}
         </List>

@@ -325,35 +325,6 @@ function EditProductPage() {
               />
             </Grid>
 
-            {/* Price */}
-            {/* <Grid item xs={12}>
-              <Grid container alignItems="center" spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontFamily: "Satoshi, sans-serif",
-                      fontSize: "16px",
-                      fontWeight: 500,
-                    }}
-                  >
-                    Price
-                  </Typography>
-                  <Grid item xs={12} sm={9}>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      name="price"
-                      value={productData.price}
-                      onChange={handleChange}
-                      type="number"
-                      step="0.01"
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid> */}
-
             {/* Images */}
             <Grid item xs={12}>
               <Grid container alignItems="center" spacing={2}>
@@ -368,15 +339,6 @@ function EditProductPage() {
                   >
                     Product Images
                   </Typography>
-                  {/* <Input
-                    accept="image/*"
-                    type="file"
-                    multiple
-                    onChange={handleImageChange}
-                    inputProps={{
-                      multiple: true,
-                    }}
-                  /> */}
                 </Grid>
                 <Grid item xs={12} sm={3}>
                   <Typography
@@ -484,9 +446,20 @@ function EditProductPage() {
 
             {/* Submit Button */}
             <Grid item xs={12}>
-              <Button variant="contained" color="primary" type="submit">
-                Update Product
-              </Button>
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  sx={{
+                    padding: "20px 70px",
+                    color: "#FFFF",
+                    backgroundColor: "#001EB9",
+                  }}
+                >
+                  Update Product
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </form>
