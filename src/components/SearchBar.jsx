@@ -2,7 +2,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { setSearchQuery } from "../redux/actions/searchActions";
 
 const SearchBar = () => {
@@ -12,21 +19,26 @@ const SearchBar = () => {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products.products);
 
-  // const handleSearchChange = (event) => {
-  //   setQuery(event.target.value);
-  //   dispatch(setSearchQuery(event.target.value)); // Update search query in Redux store
-  // };
   // Handle input changes and update suggestions
-  const handleSearchChange = (event) => {
+  const handleSearchChange = async (event) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
-    dispatch(setSearchQuery(newQuery));
+    dispatch(setSearchQuery(newQuery)); // Update the query in Redux
 
-    // Filter products for suggestions
-    const filteredSuggestions = products.filter((product) =>
-      product.productName.toLowerCase().includes(newQuery.toLowerCase())
-    );
-    setSuggestions(filteredSuggestions);
+    if (newQuery.trim()) {
+      try {
+        // Make an API call to fetch search suggestions based on the query
+        const response = await fetch(
+          `http://localhost:4000/api/search?query=${newQuery}`
+        );
+        const data = await response.json();
+        setSuggestions(data); // Update suggestions with the fetched data
+      } catch (error) {
+        console.error("Error fetching search suggestions:", error);
+      }
+    } else {
+      setSuggestions([]); // Clear suggestions if query is empty
+    }
   };
 
   const handleSearchSubmit = () => {
@@ -65,14 +77,27 @@ const SearchBar = () => {
           }}
         >
           {suggestions.map((product) => (
+            // <ListItem
+            //   button={true}
+            //   key={product._id}
+            //   onClick={() =>
+            //     navigate(`/searchResults?query=${product.productName}`)
+            //   }
+            // >
+            //   <ListItemText
+            //     primary={`SKU: ${product.sku} | ${product.productName}`}
+            //   />
+            // </ListItem>
             <ListItem
-              button
+              button // Just use 'button' here without an explicit value
               key={product._id}
               onClick={() =>
                 navigate(`/searchResults?query=${product.productName}`)
               }
             >
-              <ListItemText primary={product.productName} />
+              <ListItemText
+                primary={`SKU: ${product.sku} | ${product.productName}`}
+              />
             </ListItem>
           ))}
         </List>
